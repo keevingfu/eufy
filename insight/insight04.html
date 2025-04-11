@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eufy扫地机器人 - 爆款因子分析</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #3b82f6;
+      --background-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --border-color: #e2e8f0;
+      --hover-color: #dbeafe;
+      --active-color: #bfdbfe;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --viral-color: #8b5cf6;
+      --viral-color-light: #ddd6fe;
+      --emotion-color: #ec4899;
+      --value-color: #14b8a6;
+      --novelty-color: #f59e0b;
+      --visual-color: #06b6d4;
+      --story-color: #8b5cf6;
+      --interaction-color: #22c55e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .insight-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .insight-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .insight-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .insight-card .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .chart-container {
+      height: 320px;
+      width: 100%;
+    }
+
+    .viral-factor-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viral-factor-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+
+    .emotion-card::before {
+      background-color: var(--emotion-color);
+    }
+
+    .value-card::before {
+      background-color: var(--value-color);
+    }
+
+    .novelty-card::before {
+      background-color: var(--novelty-color);
+    }
+
+    .visual-card::before {
+      background-color: var(--visual-color);
+    }
+
+    .story-card::before {
+      background-color: var(--story-color);
+    }
+
+    .interaction-card::before {
+      background-color: var(--interaction-color);
+    }
+
+    .factor-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+      color: white;
+      font-size: 24px;
+    }
+
+    .emotion-icon {
+      background-color: var(--emotion-color);
+    }
+
+    .value-icon {
+      background-color: var(--value-color);
+    }
+
+    .novelty-icon {
+      background-color: var(--novelty-color);
+    }
+
+    .visual-icon {
+      background-color: var(--visual-color);
+    }
+
+    .story-icon {
+      background-color: var(--story-color);
+    }
+
+    .interaction-icon {
+      background-color: var(--interaction-color);
+    }
+
+    .factor-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .factor-score {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .emotion-score {
+      color: var(--emotion-color);
+    }
+
+    .value-score {
+      color: var(--value-color);
+    }
+
+    .novelty-score {
+      color: var(--novelty-color);
+    }
+
+    .visual-score {
+      color: var(--visual-color);
+    }
+
+    .story-score {
+      color: var(--story-color);
+    }
+
+    .interaction-score {
+      color: var(--interaction-color);
+    }
+
+    .factor-description {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: var(--viral-color);
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--viral-color);
+      margin: 10px 0;
+    }
+
+    .kpi-title {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .trend-up {
+      color: #10b981;
+    }
+
+    .trend-down {
+      color: #ef4444;
+    }
+
+    .table-container {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      font-weight: 600;
+      background-color: #f1f5f9;
+    }
+
+    .data-table tr:hover {
+      background-color: var(--hover-color);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .emotion-fill {
+      background-color: var(--emotion-color);
+    }
+
+    .value-fill {
+      background-color: var(--value-color);
+    }
+
+    .novelty-fill {
+      background-color: var(--novelty-color);
+    }
+
+    .visual-fill {
+      background-color: var(--visual-color);
+    }
+
+    .story-fill {
+      background-color: var(--story-color);
+    }
+
+    .interaction-fill {
+      background-color: var(--interaction-color);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .tag-high {
+      background-color: #dcfce7;
+      color: #15803d;
+    }
+
+    .tag-medium {
+      background-color: #fef9c3;
+      color: #854d0e;
+    }
+
+    .tag-low {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .insights-section {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .insights-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: var(--primary-color);
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .insight-item i {
+      color: var(--viral-color);
+      margin-right: 10px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .insight-grid, .insight-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="/api/placeholder/40/40" alt="Eufy Logo" />
+        Eufy内容驱动智能增长决策系统
+      </div>
+    </header>
+
+    <div class="page-title">爆款因子分析 - Viral Factor</div>
+
+    <!-- 关键指标卡片 -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">传播指数</div>
+        <div class="kpi-value">8.6</div>
+        <div class="trend-up">
+          <i class="fas fa-arrow-up"></i> 15% 环比上月
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">内容投资回报率</div>
+        <div class="kpi-value">3.2x</div>
+        <div class="trend-up">
+          <i class="fas fa-arrow-up"></i> 28% 环比上月
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">爆款概率预测</div>
+        <div class="kpi-value">72%</div>
+        <div class="trend-up">
+          <i class="fas fa-arrow-up"></i> 12% 环比上月
+        </div>
+      </div>
+    </div>
+
+    <!-- 爆款因子卡片 -->
+    <div class="insight-grid-3">
+      <div class="viral-factor-card emotion-card">
+        <div class="factor-icon emotion-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="factor-title">情感触发</div>
+        <div class="factor-score emotion-score">85</div>
+        <div class="factor-description">引发观众共鸣和情感连接的能力，包括惊喜、满足感和认同感。</div>
+        <div class="progress-bar">
+          <div class="progress-fill emotion-fill" style="width: 85%"></div>
+        </div>
+      </div>
+      <div class="viral-factor-card value-card">
+        <div class="factor-icon value-icon">
+          <i class="fas fa-gem"></i>
+        </div>
+        <div class="factor-title">实用价值</div>
+        <div class="factor-score value-score">76</div>
+        <div class="factor-description">内容为观众提供的实际帮助和解决问题的能力。</div>
+        <div class="progress-bar">
+          <div class="progress-fill value-fill" style="width: 76%"></div>
+        </div>
+      </div>
+      <div class="viral-factor-card novelty-card">
+        <div class="factor-icon novelty-icon">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="factor-title">新奇性</div>
+        <div class="factor-score novelty-score">68</div>
+        <div class="factor-description">呈现新颖、出人意料或独特观点的程度。</div>
+        <div class="progress-bar">
+          <div class="progress-fill novelty-fill" style="width: 68%"></div>
+        </div>
+      </div>
+      <div class="viral-factor-card story-card">
+        <div class="factor-icon story-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="factor-title">故事性</div>
+        <div class="factor-score story-score">72</div>
+        <div class="factor-description">通过叙事结构和情节发展吸引观众的能力。</div>
+        <div class="progress-bar">
+          <div class="progress-fill story-fill" style="width: 72%"></div>
+        </div>
+      </div>
+      <div class="viral-factor-card visual-card">
+        <div class="factor-icon visual-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <div class="factor-title">视觉冲击</div>
+        <div class="factor-score visual-score">81</div>
+        <div class="factor-description">令人难忘的视觉元素和场景转换的设计质量。</div>
+        <div class="progress-bar">
+          <div class="progress-fill visual-fill" style="width: 81%"></div>
+        </div>
+      </div>
+      <div class="viral-factor-card interaction-card">
+        <div class="factor-icon interaction-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div class="factor-title">互动性</div>
+        <div class="factor-score interaction-score">64</div>
+        <div class="factor-description">鼓励用户评论、分享和参与的能力。</div>
+        <div class="progress-bar">
+          <div class="progress-fill interaction-fill" style="width: 64%"></div>
+        </div>
+      </div>
+    

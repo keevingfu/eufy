@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eufy扫地机器人 - 搜索洞察</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #3b82f6;
+      --background-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --border-color: #e2e8f0;
+      --hover-color: #dbeafe;
+      --active-color: #bfdbfe;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .insight-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .insight-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .insight-card .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .chart-container {
+      height: 320px;
+      width: 100%;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 10px 0;
+    }
+
+    .metric-title {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .table-container {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      font-weight: 600;
+      background-color: #f1f5f9;
+    }
+
+    .data-table tr:hover {
+      background-color: var(--hover-color);
+    }
+
+    .trend-up {
+      color: #10b981;
+    }
+
+    .trend-down {
+      color: #ef4444;
+    }
+
+    .insights-section {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .insights-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: var(--primary-color);
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .insight-item i {
+      color: var(--primary-color);
+      margin-right: 10px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+      .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="/api/placeholder/40/40" alt="Eufy Logo" />
+        Eufy内容驱动智能增长决策系统
+      </div>
+    </header>
+
+    <div class="page-title">搜索洞察 - Search Insight</div>
+
+    <!-- 关键指标卡片 -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-title">热门搜索总量</div>
+        <div class="metric-value">1,240</div>
+        <div class="trend-up">
+          <i class="fas fa-arrow-up"></i> 23% 环比上月
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">平均搜索成本</div>
+        <div class="metric-value">$1.78</div>
+        <div class="trend-down">
+          <i class="fas fa-arrow-down"></i> 12% 环比上月
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">搜索转化率</div>
+        <div class="metric-value">3.4%</div>
+        <div class="trend-up">
+          <i class="fas fa-arrow-up"></i> 8% 环比上月
+        </div>
+      </div>
+    </div>
+
+    <!-- 图表区域 -->
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="card-header">
+          <div class="card-title">热门搜索词趋势</div>
+        </div>
+        <div class="chart-container" id="hot-keywords-chart"></div>
+      </div>
+      <div class="insight-card">
+        <div class="card-header">
+          <div class="card-title">搜索词类别分布</div>
+        </div>
+        <div class="chart-container" id="search-categories-chart"></div>
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="card-header">
+          <div class="card-title">竞品搜索量对比</div>
+        </div>
+        <div class="chart-container" id="competitor-search-chart"></div>
+      </div>
+      <div class="insight-card">
+        <div class="card-header">
+          <div class="card-title">搜索意图分析</div>
+        </div>
+        <div class="chart-container" id="search-intent-chart"></div>
+      </div>
+    </div>
+
+    <!-- 热门搜索词表格 -->
+    <div class="table-container">
+      <h3 class="insights-title">热门搜索词表现</h3>
+      <table class="data-table" id="keywords-table">
+        <thead>
+          <tr>
+            <th>搜索词</th>
+            <th>搜索量</th>
+            <th>CPC</th>
+            <th>趋势</th>
+            <th>搜索意图</th>
+            <th>类别</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 数据将通过JavaScript填充 -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 洞察和建议 -->
+    <div class="insights-section">
+      <h3 class="insights-title">搜索洞察与建议</h3>
+      <div class="insight-item">
+        <i class="fas fa-lightbulb"></i>
+        <div>
+          <strong>长尾词机会:</strong> "扫地机器人拖地功能对比"等长尾词搜索量环比增长35%，表明用户对产品功能对比信息的需求明显增加。
+        </div>
+      </div>
+      <div class="insight-item">
+        <i class="fas fa-lightbulb"></i>
+        <div>
+          <strong>搜索缺口:</strong> 用户在搜索"扫地机器人自动回收"相关词汇时，相关内容较少，建议增加此类内容的覆盖。
+        </div>
+      </div>
+      <div class="insight-item">
+        <i class="fas fa-lightbulb"></i>
+        <div>
+          <strong>竞品分析:</strong> 与Roborock相比，Eufy在"静音"相关搜索词上有明显优势，可进一步强化此差异化卖点。
+        </div>
+      </div>
+      <div class="insight-item">
+        <i class="fas fa-lightbulb"></i>
+        <div>
+          <strong>搜索行为:</strong> 用户从一般产品信息搜索到具体功能对比的转化率达46%，建议优化产品页面中的功能对比部分。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入图表库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 热门搜索词趋势图
+      const hotKeywordsChart = echarts.init(document.getElementById('hot-keywords-chart'));
+      const hotKeywordsOption = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['智能扫地机器人', 'Eufy扫地机器人评测', '扫地机器人对比', '最好的扫地机器人', '扫地机器人价格']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['1月', '2月', '3月', '4月', '5月', '6月']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '智能扫地机器人',
+            type: 'line',
+            data: [12500, 12800, 13100, 13400, 13800, 14200]
+          },
+          {
+            name: 'Eufy扫地机器人评测',
+            type: 'line',
+            data: [8700, 8900, 9200, 9400, 9600, 9800]
+          },
+          {
+            name: '扫地机器人对比',
+            type: 'line',
+            data: [7300, 7500, 7600, 7800, 8000, 8100]
+          },
+          {
+            name: '最好的扫地机器人',
+            type: 'line',
+            data: [6800, 6900, 7000, 7200, 7300, 7400]
+          },
+          {
+            name: '扫地机器人价格',
+            type: 'line',
+            data: [5400, 5300, 5200, 5100, 5000, 4900]
+          }
+        ]
+      };
+      hotKeywordsChart.setOption(hotKeywordsOption);
+
+      // 搜索词类别分布
+      const searchCategoriesChart = echarts.init(document.getElementById('search-categories-chart'));
+      const searchCategoriesOption = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 10,
+          data: ['产品信息', '价格对比', '功能对比', '用户评价', '故障解决']
+        },
+        series: [
+          {
+            name: '搜索类别',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '18',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 38, name: '产品信息' },
+              { value: 25, name: '价格对比' },
+              { value: 20, name: '功能对比' },
+              { value: 12, name: '用户评价' },
+              { value: 5, name: '故障解决' }
+            ]
+          }
+        ]
+      };
+      searchCategoriesChart.setOption(searchCategoriesOption);
+
+      // 竞品搜索量对比
+      const competitorSearchChart = echarts.init(document.getElementById('competitor-search-chart'));
+      const competitorSearchOption = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['Eufy', 'Roborock', 'Roomba', 'Shark']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          data: ['品牌认知度', '价格搜索', '评测搜索', '功能搜索', '问题解决']
+        },
+        series: [
+          {
+            name: 'Eufy',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [280, 310, 350, 320, 240]
+          },
+          {
+            name: 'Roborock',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [320, 280, 330, 360, 280]
+          },
+          {
+            name: 'Roomba',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [380, 320, 340, 310, 300]
+          },
+          {
+            name: 'Shark',
+            type: 'bar',
+            stack: 'total',
+            emphasis: {
+              focus: 'series'
+            },
+            data: [220, 290, 250, 270, 230]
+          }
+        ]
+      };
+      competitorSearchChart.setOption(competitorSearchOption);
+
+      // 搜索意图分析
+      const searchIntentChart = echarts.init(document.getElementById('search-intent-chart'));
+      const searchIntentOption = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          right: 10,
+          top: 'center',
+          data: ['购买意图', '信息收集', '问题解决', '功能对比', '价格比较']
+        },
+        series: [
+          {
+            name: '搜索意图',
+            type: 'pie',
+            radius: '70%',
+            center: ['40%', '50%'],
+            data: [
+              { value: 35, name: '购买意图' },
+              { value: 30, name: '信息收集' },
+              { value: 15, name: '问题解决' },
+              { value: 12, name: '功能对比' },
+              { value: 8, name: '价格比较' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      searchIntentChart.setOption(searchIntentOption);
+
+      // 填充热门搜索词表格
+      const keywordsTableBody = document.querySelector('#keywords-table tbody');
+      const keywordsData = [
+        { keyword: '智能扫地机器人', volume: 12500, cpc: 1.2, trend: 'up', intent: '信息收集', category: '产品信息' },
+        { keyword: 'Eufy扫地机器人评测', volume: 8700, cpc: 0.9, trend: 'up', intent: '信息收集', category: '产品评测' },
+        { keyword: '扫地机器人对比', volume: 7300, cpc: 1.5, trend: 'up', intent: '功能对比', category: '对比' },
+        { keyword: '最好的扫地机器人', volume: 6800, cpc: 1.8, trend: 'up', intent: '购买意图', category: '产品评测' },
+        { keyword: '扫地机器人价格', volume: 5400, cpc: 1.1, trend: 'down', intent: '价格比较', category: '价格' },
+        { keyword: '扫地拖地一体机', volume: 4900, cpc: 1.3, trend: 'up', intent: '信息收集', category: '产品信息' }
+      ];
+
+      keywordsData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.keyword}</td>
+          <td>${item.volume.toLocaleString()}</td>
+          <td>$${item.cpc.toFixed(2)}</td>
+          <td class="trend-${item.trend}">
+            <i class="fas fa-arrow-${item.trend}"></i>
+          </td>
+          <td>${item.intent}</td>
+          <td>${item.category}</td>
+        `;
+        keywordsTableBody.appendChild(row);
+      });
+
+      // 响应式调整
+      window.addEventListener('resize', function() {
+        hotKeywordsChart.resize();
+        searchCategoriesChart.resize();
+        competitorSearchChart.resize();
+        searchIntentChart.resize();
+      });
+    });
+  </script>
+</body>
+
+</html>
