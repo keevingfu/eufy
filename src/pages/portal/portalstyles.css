@@ -10,7 +10,7 @@
 }
 
 .chinese-title {
-  @apply text-4xl font-bold text-pink-600 mb-2;
+  @apply text-4xl font-bold text-blue-600 mb-2;
 }
 
 .english-subtitle {
@@ -51,7 +51,7 @@
 }
 
 .nav-item {
-  @apply flex items-center justify-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-lg font-medium text-gray-800 hover:text-pink-600;
+  @apply flex items-center justify-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-lg font-medium text-gray-800 hover:text-blue-600;
 }
 
 /* Responsive adjustments */

@@ -1,58 +1,58 @@
 import Anthropic from '@anthropic-ai/sdk';
 
 /**
- * Claude 3.7 Sonnet模型调用接口
- * 提供与Claude AI模型交互的方法
+ * Claude 3.7 Sonnet model interface
+ * Provides methods for interacting with Claude AI model
  */
 export class DeepModel {
   /**
-   * 初始化DeepModel实例
-   * @param {string} apiKey Anthropic API密钥
+   * Initialize DeepModel instance
+   * @param {string} apiKey Anthropic API key
    */
   constructor(apiKey) {
     this.anthropic = new Anthropic({
       apiKey: apiKey,
-      dangerouslyAllowBrowser: true, // 允许在浏览器环境中运行
+      dangerouslyAllowBrowser: true, // Allow running in browser environment
     });
     this.model = 'claude-3-5-sonnet-20240620';
   }
 
   /**
-   * 发送文本请求到Claude模型并获取响应
-   * @param {string} query 用户查询文本
-   * @param {string} systemPrompt 系统提示（可选）
-   * @param {number} maxTokens 最大生成令牌数（默认为1000）
-   * @returns {Promise<string>} 模型响应文本
+   * Send text request to Claude model and get response
+   * @param {string} query User query text
+   * @param {string} systemPrompt System prompt (optional)
+   * @param {number} maxTokens Maximum tokens to generate (default 1000)
+   * @returns {Promise<string>} Model response text
    */
   async query(query, systemPrompt, maxTokens = 1000) {
     try {
       const response = await this.anthropic.messages.create({
         model: this.model,
         max_tokens: maxTokens,
-        system: systemPrompt || "你是一个专业的市场研究和数据分析助手，提供详细、准确和有洞察力的回答。",
+        system: systemPrompt || "You are a professional market research and data analysis assistant, providing detailed, accurate, and insightful answers.",
         messages: [
           { role: "user", content: query }
         ]
       });
 
-      // 检查内容类型并提取文本
+      // Check content type and extract text
       if (response.content[0].type === 'text') {
         return response.content[0].text;
       } else {
-        throw new Error('响应内容不是文本类型');
+        throw new Error('Response content is not text type');
       }
     } catch (error) {
-      console.error('Claude API调用失败:', error);
-      throw new Error(`调用Claude模型失败: ${error instanceof Error ? error.message : String(error)}`);
+      console.error('Claude API call failed:', error);
+      throw new Error(`Claude model call failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
   /**
-   * 发送多轮对话请求到Claude模型
-   * @param {Array<{role: 'user' | 'assistant', content: string}>} messages 消息数组，包含角色和内容
-   * @param {string} systemPrompt 系统提示（可选）
-   * @param {number} maxTokens 最大生成令牌数（默认为1000）
-   * @returns {Promise<string>} 模型响应文本
+   * Send multi-turn conversation request to Claude model
+   * @param {Array<{role: 'user' | 'assistant', content: string}>} messages Message array with roles and content
+   * @param {string} systemPrompt System prompt (optional)
+   * @param {number} maxTokens Maximum tokens to generate (default 1000)
+   * @returns {Promise<string>} Model response text
    */
   async conversation(messages, systemPrompt, maxTokens = 1000) {
     try {
@@ -64,37 +64,37 @@ export class DeepModel {
       const response = await this.anthropic.messages.create({
         model: this.model,
         max_tokens: maxTokens,
-        system: systemPrompt || "你是一个专业的市场研究和数据分析助手，提供详细、准确和有洞察力的回答。",
+        system: systemPrompt || "You are a professional market research and data analysis assistant, providing detailed, accurate, and insightful answers.",
         messages: formattedMessages
       });
 
-      // 检查内容类型并提取文本
+      // Check content type and extract text
       if (response.content[0].type === 'text') {
         return response.content[0].text;
       } else {
-        throw new Error('响应内容不是文本类型');
+        throw new Error('Response content is not text type');
       }
     } catch (error) {
-      console.error('Claude API多轮对话调用失败:', error);
-      throw new Error(`调用Claude模型失败: ${error instanceof Error ? error.message : String(error)}`);
+      console.error('Claude API multi-turn conversation call failed:', error);
+      throw new Error(`Claude model call failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
   /**
-   * 流式输出查询结果
-   * @param {string} query 用户查询文本
-   * @param {string} systemPrompt 系统提示（可选）
-   * @param {number} maxTokens 最大生成令牌数（默认为1000）
-   * @param {function} onDelta 处理每个增量文本的回调函数
-   * @param {function} onComplete 处理完成时的回调函数
-   * @param {function} onError 处理错误的回调函数
+   * Stream query results
+   * @param {string} query User query text
+   * @param {string} systemPrompt System prompt (optional)
+   * @param {number} maxTokens Maximum tokens to generate (default 1000)
+   * @param {function} onDelta Callback function for each incremental text
+   * @param {function} onComplete Callback function for completion
+   * @param {function} onError Callback function for error handling
    */
   async streamQuery(query, systemPrompt, maxTokens = 1000, onDelta, onComplete, onError) {
     try {
       const stream = await this.anthropic.messages.create({
         model: this.model,
         max_tokens: maxTokens,
-        system: systemPrompt || "你是一个专业的市场研究和数据分析助手，提供详细、准确和有洞察力的回答。",
+        system: systemPrompt || "You are a professional market research and data analysis assistant, providing detailed, accurate, and insightful answers.",
         messages: [
           { role: "user", content: query }
         ],
@@ -117,7 +117,7 @@ export class DeepModel {
         onComplete(fullResponse);
       }
     } catch (error) {
-      console.error('Claude API流式调用失败:', error);
+      console.error('Claude API streaming call failed:', error);
       if (onError) {
         onError(error);
       }
@@ -125,206 +125,229 @@ export class DeepModel {
   }
 
   /**
-   * 生成思维链过程
-   * @param {string} topic 研究主题
-   * @param {function} onThinking 处理思考过程的回调函数
-   * @returns {Promise<string[]>} 思维链步骤数组
+   * Generate thought chain process
+   * @param {string} topic Research topic
+   * @param {function} onThinking Callback function for thinking process
+   * @returns {Promise<string[]>} Thought chain steps array
    */
   async generateThoughtChain(topic, onThinking = null) {
-    // 默认步骤，在各种错误情况下返回
+    // Default steps, returned in various error situations
     const defaultSteps = [
-      `确定研究范围 - 分析"${topic}"的市场规模、主要参与者和消费者行为`,
-      `收集数据 - 整合行业报告、消费者调查和竞争对手分析`,
-      `识别关键趋势 - 发现市场中的新兴模式和消费者偏好变化`,
-      `分析竞争格局 - 评估主要参与者的优势、劣势和市场策略`,
-      `提取消费者洞察 - 理解目标受众的需求、痛点和购买决策因素`,
-      `识别机会 - 发现未满足的需求和潜在的市场空白`,
-      `制定建议 - 基于分析结果提出具体的行动建议`
+      `Define research scope - Analyze market size, key players, and consumer behavior for "${topic}"`,
+      `Collect data - Integrate industry reports, consumer surveys, and competitor analysis`,
+      `Identify key trends - Discover emerging patterns and changes in consumer preferences`,
+      `Analyze competitive landscape - Evaluate strengths, weaknesses, and market strategies of key players`,
+      `Extract consumer insights - Understand target audience needs, pain points, and purchase decision factors`,
+      `Identify opportunities - Discover unmet needs and potential market gaps`,
+      `Develop recommendations - Propose specific action recommendations based on analysis results`
     ];
     
-    // 使用AI模型动态生成思维链过程
+    // Use AI model to dynamically generate thought chain process
     const question = topic;
     
-    const prompt = `你是一个专业的搜索规划助手。请分析用户的问题并制定搜索计划。
-    用户问题: ${question}
-    请按照以下步骤思考:
-    1. 分析问题的核心意图和关键概念
-      可用参考如下几个方向 但是要考虑实际问题(${defaultSteps})
-    2. 将问题分解为可搜索的子问题
-    3. 为每个子问题设计合适的搜索查询词
-    4. 规划搜索结果的整合方式
-    以JSON格式输出你的规划:
+    const prompt = `You are a professional search planning assistant. Please analyze the user's question and develop a search plan.
+    User question: ${question}
+    Please think through the following steps:
+    1. Analyze the core intent and key concepts of the question
+      You can reference the following directions but consider the actual question(${defaultSteps})
+    2. Break down the question into searchable sub-problems
+    3. Design appropriate search query terms for each sub-problem
+    4. Plan how to integrate the search results
+    Output your plan in JSON format:
     {
-    "intent": "问题的核心意图",
-    "key_concepts": ["概念1","概念2", ...],
+    "intent": "Core intent of the question",
+    "key_concepts": ["Concept1","Concept2", ...],
     "sub_tasks": [
     {
-    "id": "子任务1",
-    "description": "子任务描述",
-    "search_query": "搜索查询词",
-    "expected_info": "期望获取的信息"
+    "id": "Subtask1",
+    "description": "Subtask description",
+    "search_query": "Search query terms",
+    "expected_info": "Expected information to obtain"
     },...],
-    "integration_plan": "结果整合计划"
+    "integration_plan": "Results integration plan"
     }
     `;
 
     try {
-      // 如果提供了回调函数，先发送初始思考状态
+      // If callback function is provided, send initial thinking state
       if (onThinking) {
-        onThinking("正在分析问题...", "思考中");
+        onThinking("Analyzing the question...", "Thinking");
       }
       
-      // 使用流式输出调用Claude API获取规划结果
+      // Use streaming output to call Claude API for planning results
       let fullResponse = '';
       
-      // 创建一个Promise来处理流式响应
+      // Create a Promise to handle streaming response
       const responsePromise = new Promise((resolve, reject) => {
         this.streamQuery(
           prompt, 
           null, 
           2000,
-          // 处理每个增量文本的回调
+          // Callback for handling each incremental text
           (delta, currentResponse) => {
             fullResponse = currentResponse;
             
-            // 将思考过程实时传递给回调函数
+            // Pass thinking process to callback function in real-time
             if (onThinking) {
-              // 提取当前正在思考的部分
-              const thinkingMatch = currentResponse.match(/正在思考:([\s\S]*?)(?=\n\n|$)/i);
-              const currentThinking = thinkingMatch ? thinkingMatch[1].trim() : "分析问题中...";
+              // Extract current thinking part
+              const thinkingMatch = currentResponse.match(/Thinking:([\s\S]*?)(?=\n\n|$)/i);
+              const currentThinking = thinkingMatch ? thinkingMatch[1].trim() : "Analyzing the problem...";
               
-              // 更新思考状态
+              // Update thinking state
               onThinking(currentResponse, currentThinking);
             }
           },
-          // 完成时的回调
+          // Callback for completion
           (completeResponse) => {
             resolve(completeResponse);
           },
-          // 错误处理
+          // Error handling
           (error) => {
-            console.error('流式调用失败:', error);
+            console.error('Streaming call failed:', error);
             reject(error);
           }
         );
       });
       
-      // 等待流式响应完成
+      // Wait for streaming response to complete
       const response = await responsePromise;
       
-      // 如果提供了回调函数，发送最终思考状态
+      // If callback function is provided, send final thinking state
       if (onThinking) {
-        onThinking(response, "思考完成，正在整理结果");
+        onThinking(response, "Thinking complete, organizing results");
       }
       
-      // 提取JSON部分
-      const jsonMatch = response.match(/```(?:json)?\s*({[\s\S]*?})```/);
+      // Extract JSON part
+      // 尝试匹配三个反引号包围的JSON
+      let jsonMatch = response.match(/```(?:json)?\s*({[\s\S]*?})```/);
+      
+      // 如果没有找到，尝试匹配直接在文本中的JSON（以"{"开始，以"}"结束的部分）
       if (!jsonMatch) {
-        console.log('无法从响应中提取JSON，尝试直接解析响应');
+        jsonMatch = response.match(/(?:JSON format[^{]*)?({[\s\S]*?})\s*(?:"?$|(?=\n\n))/);
+      }
+      
+      if (!jsonMatch) {
+        console.log('Unable to extract JSON from response, attempting to extract subtasks from text response');
         try {
-          // 尝试直接解析整个响应
-          const planData = JSON.parse(response);
+          // Try to extract subtasks from text response
+          const subtasksMatch = response.match(/sub[-_]tasks?[:\s]+([\s\S]*?)(?=\n\n|$)/i);
+          if (subtasksMatch) {
+            const subtasksText = subtasksMatch[1];
+            const subtasks = subtasksText.split(/\n\s*[-*•]\s*/).filter(line => line.trim());
+            if (subtasks.length > 0) {
+              return subtasks.map(task => task.trim());
+            }
+          }
           
-          // 提取子任务作为步骤
-          if (planData.sub_tasks && Array.isArray(planData.sub_tasks)) {
-            return planData.sub_tasks.map(task => task.description || task.id);
+          // If no subtasks found, try to find numbered list items
+          const numberedListMatch = response.match(/\d+\.\s+([^\n]+)(?:\n|$)/g);
+          if (numberedListMatch && numberedListMatch.length > 0) {
+            return numberedListMatch.map(item => item.replace(/^\d+\.\s+/, '').trim());
+          }
+          
+          // If still no structured content found, try to parse as JSON as last resort
+          try {
+            const planData = JSON.parse(response);
+            if (planData.sub_tasks && Array.isArray(planData.sub_tasks)) {
+              return planData.sub_tasks.map(task => task.description || task.id);
+            }
+          } catch (jsonError) {
+            console.log('Response is not valid JSON, using default steps');
           }
         } catch (parseError) {
-          console.error('直接解析响应失败:', parseError);
-          console.log('返回默认思维链步骤');
-          return defaultSteps;
+          console.error('Text parsing failed:', parseError);
         }
         
-        // 如果没有返回，则使用默认步骤
+        console.log('Returning default thought chain steps');
         return defaultSteps;
       }
       
       try {
-        // 解析JSON
+        // Parse JSON
         const planData = JSON.parse(jsonMatch[1]);
         
-        // 提取子任务作为步骤
+        // Extract subtasks as steps
         if (planData.sub_tasks && Array.isArray(planData.sub_tasks)) {
           return planData.sub_tasks.map(task => task.description || task.id);
         } else {
-          console.error('规划数据中没有有效的子任务');
+          console.error('No valid subtasks in planning data');
           return defaultSteps;
         }
       } catch (jsonError) {
-        console.error('解析JSON失败:', jsonError);
+        console.error('JSON parsing failed:', jsonError);
         return defaultSteps;
       }
     } catch (error) {
-      console.error('生成思维链失败:', error);
+      console.error('Thought chain generation failed:', error);
       return defaultSteps;
     }
   }
 
   /**
-   * 流式输出思维链过程并生成分析结果
-   * @param {string} topic 研究主题
-   * @param {function} onThoughtStep 处理每个思维步骤的回调函数
-   * @param {function} onThoughtChainComplete 思维链完成时的回调函数
-   * @param {function} onAnalysisResult 处理分析结果的回调函数
-   * @param {number} delayBetweenSteps 步骤之间的延迟时间（毫秒）
-   * @returns {Promise<{thoughtChain: string[], analysisResult: string}>} 思维链步骤数组和分析结果
+   * Stream thought chain process and generate analysis results
+   * @param {string} topic Research topic
+   * @param {function} onThoughtStep Callback function for each thought step
+   * @param {function} onThoughtChainComplete Callback function when thought chain is complete
+   * @param {function} onAnalysisResult Callback function for analysis results
+   * @param {number} delayBetweenSteps Delay time between steps (milliseconds)
+   * @returns {Promise<{thoughtChain: string[], analysisResult: string}>} Thought chain steps array and analysis result
    */
   async streamThoughtChain(topic, onThoughtStep, onThoughtChainComplete, onAnalysisResult, delayBetweenSteps = 1000) {
     try {
-      // 设置思考状态
+      // Set thinking state
       let modelThinking = '';
-      let modelThinkingState = '初始化思考过程...';
+      let modelThinkingState = 'Initializing thinking process...';
       
-      // 创建一个回调函数来处理模型思考过程
+      // Create a callback function to handle model thinking process
       const onModelThinking = (thinkingContent, thinkingState) => {
         modelThinking = thinkingContent;
         modelThinkingState = thinkingState;
         
-        // 将模型思考过程传递给分析结果回调
+        // Pass model thinking process to analysis result callback
         if (onAnalysisResult) {
-          const thinkingOutput = `模型思考过程：\n\n${modelThinking}\n\n当前状态：${modelThinkingState}`;
+          const thinkingOutput = `Model thinking process:\n\n${modelThinking}\n\nCurrent state: ${modelThinkingState}`;
           onAnalysisResult(thinkingOutput, thinkingOutput);
         }
       };
       
-      // 获取思维链步骤，同时传递思考过程回调
+      // Get thought chain steps while passing thinking process callback
       const steps = await this.generateThoughtChain(topic, onModelThinking);
       
-      // 模拟AI思考过程，逐步输出思维链
+      // Simulate AI thinking process, output thought chain step by step
       const completedSteps = [];
       for (let i = 0; i < steps.length; i++) {
-        // 延迟一段时间，模拟思考过程
+        // Delay for a period of time to simulate thinking process
         await new Promise(resolve => setTimeout(resolve, delayBetweenSteps));
         
-        // 添加到已完成步骤
+        // Add to completed steps
         completedSteps.push(steps[i]);
         
-        // 调用回调函数，传递当前步骤和完成的步骤数组
+        // Call callback function, passing current step and completed steps array
         if (onThoughtStep) {
           onThoughtStep(steps[i], completedSteps);
         }
       }
       
-      // 思维链完成后，生成简短的分析结果
+      // After thought chain is complete, generate brief analysis result
       if (onThoughtChainComplete) {
         onThoughtChainComplete(steps);
       }
       
-      // 生成初步分析结果
+      // Generate preliminary analysis result
       const analysisPrompt = `
-        基于以下思维链步骤，请提供一个简短的初步分析结果，包括这个主题的核心要点、需要关注的关键领域和可能的研究方向：
+        Based on the following thought chain steps, please provide a brief preliminary analysis result, including the core points of this topic, key areas to focus on, and possible research directions:
         
-        研究主题: "${topic}"
-        思维链步骤:
+        Research topic: "${topic}"
+        Thought chain steps:
         ${steps.join('\n')}
       `;
       
-      // 使用流式输出获取分析结果
+      // Use streaming output to get analysis result
       if (onAnalysisResult) {
         const stream = await this.anthropic.messages.create({
           model: this.model,
           max_tokens: 1000,
-          system: "你是一个专业的市场研究分析师，擅长提供简洁明了的初步分析。",
+          system: "You are a professional market research analyst, skilled at providing concise and clear preliminary analysis.",
           messages: [
             { role: "user", content: analysisPrompt }
           ],
@@ -351,17 +374,17 @@ export class DeepModel {
         analysisResult: ''
       };
     } catch (error) {
-      console.error('流式输出思维链过程失败:', error);
+      console.error('Streaming thought chain process failed:', error);
       
-      // 返回默认步骤
+      // Return default steps
       const defaultSteps = [
-        `第1步：确定研究范围 - 分析"${topic}"的市场规模、主要参与者和消费者行为`,
-        `第2步：收集数据 - 整合行业报告、消费者调查和竞争对手分析`,
-        `第3步：识别关键趋势 - 发现市场中的新兴模式和消费者偏好变化`,
-        `第4步：分析竞争格局 - 评估主要参与者的优势、劣势和市场策略`,
-        `第5步：提取消费者洞察 - 理解目标受众的需求、痛点和购买决策因素`,
-        `第6步：识别机会 - 发现未满足的需求和潜在的市场空白`,
-        `第7步：制定建议 - 基于分析结果提出具体的行动建议`
+        `Step 1: Define research scope - Analyze market size, key players, and consumer behavior for "${topic}"`,
+        `Step 2: Collect data - Integrate industry reports, consumer surveys, and competitor analysis`,
+        `Step 3: Identify key trends - Discover emerging patterns and changes in consumer preferences`,
+        `Step 4: Analyze competitive landscape - Evaluate strengths, weaknesses, and market strategies of key players`,
+        `Step 5: Extract consumer insights - Understand target audience needs, pain points, and purchase decision factors`,
+        `Step 6: Identify opportunities - Discover unmet needs and potential market gaps`,
+        `Step 7: Develop recommendations - Propose specific action recommendations based on analysis results`
       ];
       
       if (onThoughtChainComplete) {
@@ -370,44 +393,44 @@ export class DeepModel {
       
       return {
         thoughtChain: defaultSteps,
-        analysisResult: `分析失败: ${error instanceof Error ? error.message : String(error)}`
+        analysisResult: `Analysis failed: ${error instanceof Error ? error.message : String(error)}`
       };
     }
   }
 
   /**
-   * 发送市场研究分析请求
-   * @param {string} topic 研究主题
-   * @param {string} additionalContext 额外的上下文信息（可选）
-   * @param {function} onProgress 处理进度更新的回调函数，接收delta和fullResponse参数
-   * @param {boolean} useStreaming 是否使用流式输出（默认为false）
-   * @returns {Promise<any>} 市场研究分析结果
+   * Send market research analysis request
+   * @param {string} topic Research topic
+   * @param {string} additionalContext Additional context information (optional)
+   * @param {function} onProgress Callback function for progress updates, receives delta and fullResponse parameters
+   * @param {boolean} useStreaming Whether to use streaming output (default false)
+   * @returns {Promise<any>} Market research analysis result
    */
   async marketResearch(topic, additionalContext, onProgress, useStreaming = false) {
     const systemPrompt = `
-      你是一个专业的市场研究分析师，擅长分析市场趋势、消费者行为和竞争格局。
-      请提供详细、结构化的市场研究报告，包括以下部分：
-      1. 执行摘要
-      2. 关键发现
-      3. 市场趋势分析
-      4. 消费者洞察
-      5. 竞争分析
-      6. 机会与建议
+      You are a professional market research analyst, skilled at analyzing market trends, consumer behavior, and competitive landscape.
+      Please provide a detailed, structured market research report, including the following sections:
+      1. Executive Summary
+      2. Key Findings
+      3. Market Trend Analysis
+      4. Consumer Insights
+      5. Competitive Analysis
+      6. Opportunities and Recommendations
       
-      使用数据支持你的分析，并提供可操作的建议。
+      Support your analysis with data and provide actionable recommendations.
     `;
 
     const query = `
-      请对以下主题进行深入的市场研究分析：${topic}
-      ${additionalContext ? `\n额外背景信息：${additionalContext}` : ''}
+      Please conduct an in-depth market research analysis on the following topic: ${topic}
+      ${additionalContext ? `\nAdditional background information: ${additionalContext}` : ''}
     `;
 
     try {
       let result;
       
-      // 使用流式输出或普通查询
+      // Use streaming output or regular query
       if (useStreaming) {
-        // 使用流式输出获取分析结果
+        // Use streaming output to get analysis result
         const stream = await this.anthropic.messages.create({
           model: this.model,
           max_tokens: 4000,
@@ -432,10 +455,10 @@ export class DeepModel {
         
         result = fullResponse;
       } else {
-        // 使用普通查询
+        // Use regular query
         result = await this.query(query, systemPrompt, 4000);
         
-        // 如果有进度回调，一次性传递完整结果
+        // If there's a progress callback, pass the complete result at once
         if (onProgress) {
           onProgress(result, result);
         }
@@ -447,40 +470,40 @@ export class DeepModel {
         topic: topic
       };
     } catch (error) {
-      console.error('市场研究分析失败:', error);
+      console.error('Market research analysis failed:', error);
       return {
         success: false,
-        error: `市场研究分析失败: ${error instanceof Error ? error.message : String(error)}`,
+        error: `Market research analysis failed: ${error instanceof Error ? error.message : String(error)}`,
         topic: topic
       };
     }
   }
 
   /**
-   * 分析竞争对手
-   * @param {string[]} competitors 竞争对手名称数组
-   * @param {string} industry 行业
-   * @param {function} onProgress 处理进度更新的回调函数（可选）
-   * @returns {Promise<any>} 竞争对手分析结果
+   * Analyze competitors
+   * @param {string[]} competitors Competitor names array
+   * @param {string} industry Industry
+   * @param {function} onProgress Callback function for progress updates (optional)
+   * @returns {Promise<any>} Competitor analysis result
    */
   async competitorAnalysis(competitors, industry, onProgress = null) {
     const systemPrompt = `
-      你是一个专业的竞争分析专家，擅长评估竞争格局和战略定位。
-      请提供详细的竞争对手分析，包括：
-      1. 每个竞争对手的优势和劣势
-      2. 市场份额和定位
-      3. 产品/服务对比
-      4. 营销策略
-      5. 差异化机会
+      You are a professional competitive analysis expert, skilled at evaluating competitive landscape and strategic positioning.
+      Please provide detailed competitor analysis, including:
+      1. Strengths and weaknesses of each competitor
+      2. Market share and positioning
+      3. Product/service comparison
+      4. Marketing strategies
+      5. Differentiation opportunities
     `;
 
     const query = `
-      请对${industry}行业的以下竞争对手进行详细分析：
+      Please provide a detailed analysis of the following competitors in the ${industry} industry:
       ${competitors.join(', ')}
     `;
 
     try {
-      // 如果提供了进度回调，使用流式输出
+      // If progress callback is provided, use streaming output
       if (onProgress) {
         const stream = await this.anthropic.messages.create({
           model: this.model,
@@ -509,7 +532,7 @@ export class DeepModel {
           industry: industry
         };
       } else {
-        // 否则使用普通查询
+        // Otherwise use regular query
         const response = await this.query(query, systemPrompt, 4000);
         
         return {
@@ -520,10 +543,10 @@ export class DeepModel {
         };
       }
     } catch (error) {
-      console.error('竞争对手分析失败:', error);
+      console.error('Competitor analysis failed:', error);
       return {
         success: false,
-        error: `竞争对手分析失败: ${error instanceof Error ? error.message : String(error)}`,
+        error: `Competitor analysis failed: ${error instanceof Error ? error.message : String(error)}`,
         competitors: competitors,
         industry: industry
       };
@@ -531,31 +554,31 @@ export class DeepModel {
   }
 
   /**
-   * 生成消费者洞察报告
-   * @param {string} targetAudience 目标受众
-   * @param {string} product 产品或服务
-   * @param {function} onProgress 处理进度更新的回调函数（可选）
-   * @returns {Promise<any>} 消费者洞察报告
+   * Generate consumer insights report
+   * @param {string} targetAudience Target audience
+   * @param {string} product Product or service
+   * @param {function} onProgress Callback function for progress updates (optional)
+   * @returns {Promise<any>} Consumer insights report
    */
   async consumerInsights(targetAudience, product, onProgress = null) {
     const systemPrompt = `
-      你是一个专业的消费者洞察分析师，擅长理解消费者行为、需求和偏好。
-      请提供详细的消费者洞察报告，包括：
-      1. 目标受众概况
-      2. 消费者行为模式
-      3. 购买决策因素
-      4. 痛点和需求
-      5. 机会和建议
+      You are a professional consumer insights analyst, skilled at understanding consumer behavior, needs, and preferences.
+      Please provide a detailed consumer insights report, including:
+      1. Target audience overview
+      2. Consumer behavior patterns
+      3. Purchase decision factors
+      4. Pain points and needs
+      5. Opportunities and recommendations
     `;
 
     const query = `
-      请为以下产品/服务生成详细的消费者洞察报告：
-      产品/服务：${product}
-      目标受众：${targetAudience}
+      Please generate a detailed consumer insights report for the following product/service:
+      Product/Service: ${product}
+      Target Audience: ${targetAudience}
     `;
 
     try {
-      // 如果提供了进度回调，使用流式输出
+      // If progress callback is provided, use streaming output
       if (onProgress) {
         const stream = await this.anthropic.messages.create({
           model: this.model,
@@ -584,7 +607,7 @@ export class DeepModel {
           product: product
         };
       } else {
-        // 否则使用普通查询
+        // Otherwise use regular query
         const response = await this.query(query, systemPrompt, 4000);
         
         return {
@@ -595,10 +618,10 @@ export class DeepModel {
         };
       }
     } catch (error) {
-      console.error('消费者洞察分析失败:', error);
+      console.error('Consumer insights analysis failed:', error);
       return {
         success: false,
-        error: `消费者洞察分析失败: ${error instanceof Error ? error.message : String(error)}`,
+        error: `Consumer insights analysis failed: ${error instanceof Error ? error.message : String(error)}`,
         targetAudience: targetAudience,
         product: product
       };
@@ -607,31 +630,31 @@ export class DeepModel {
 }
 
 /**
- * 创建DeepModel实例的工厂函数
- * @param {string} apiKey Anthropic API密钥
- * @returns {DeepModel} DeepModel实例
+ * Factory function to create DeepModel instance
+ * @param {string} apiKey Anthropic API key
+ * @returns {DeepModel} DeepModel instance
  */
 export const createDeepModel = (apiKey) => {
   return new DeepModel(apiKey);
 };
 
 /**
- * 使用示例
+ * Usage examples
  * 
- * // 初始化
+ * // Initialization
  * const apiKey = 'your-anthropic-api-key';
  * const deepModel = createDeepModel(apiKey);
  * 
- * // 简单查询
- * const response = await deepModel.query('分析2025年零售业的主要趋势');
+ * // Simple query
+ * const response = await deepModel.query('Analyze major retail trends for 2025');
  * 
- * // 市场研究
- * const research = await deepModel.marketResearch('Gen Z在中国市场的消费行为');
+ * // Market research
+ * const research = await deepModel.marketResearch('Gen Z consumer behavior in the Chinese market');
  * 
- * // 竞争对手分析
- * const competitors = ['竞争对手A', '竞争对手B', '竞争对手C'];
- * const analysis = await deepModel.competitorAnalysis(competitors, '零售业');
+ * // Competitor analysis
+ * const competitors = ['Competitor A', 'Competitor B', 'Competitor C'];
+ * const analysis = await deepModel.competitorAnalysis(competitors, 'retail');
  * 
- * // 消费者洞察
- * const insights = await deepModel.consumerInsights('18-24岁大学生', '生活用品');
+ * // Consumer insights
+ * const insights = await deepModel.consumerInsights('College students aged 18-24', 'household goods');
  */

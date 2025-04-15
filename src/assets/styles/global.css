@@ -31,7 +31,7 @@
   }
   
   .back-link {
-    @apply mt-4 inline-flex items-center text-sm text-pink-600 hover:text-pink-700;
+    @apply mt-4 inline-flex items-center text-sm text-blue-600 hover:text-blue-700;
   }
   
   .content-area {
