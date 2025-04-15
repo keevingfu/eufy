@@ -133,7 +133,7 @@ const KocKolManagement = () => {
             <Search size={18} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
           
-          <button className="py-2 px-4 bg-pink-600 text-white rounded-lg shadow-sm hover:bg-pink-700 flex items-center">
+          <button className="py-2 px-4 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-pink-700 flex items-center">
             <PlusCircle size={18} className="mr-2" />
             Add KOC
           </button>
@@ -836,7 +836,7 @@ const KocKolManagement = () => {
             <div className="p-6 border-b border-gray-200 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-800">Self-operated Matrix Accounts</h3>
               <div className="flex space-x-2">
-                <button className="px-3 py-1.5 bg-pink-600 text-white rounded text-sm hover:bg-pink-700 flex items-center">
+                <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-pink-700 flex items-center">
                   <Plus size={14} className="mr-1" />
                   Add Account
                 </button>
