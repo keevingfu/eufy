@@ -1,1 +1,0 @@
-echo // Insight module queries

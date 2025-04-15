@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .module-container {
+    @apply min-h-screen bg-gray-50 p-6;
+  }
+  
+  .module-header {
+    @apply mb-8;
+  }
+  
+  .module-header h1 {
+    @apply text-3xl font-bold text-gray-900;
+  }
+  
+  .module-description {
+    @apply mt-2 text-sm text-gray-600;
+  }
+  
+  .back-link {
+    @apply mt-4 inline-flex items-center text-sm text-blue-600 hover:text-blue-700;
+  }
+  
+  .content-area {
+    @apply bg-white rounded-lg shadow p-6;
+  }
+} 

@@ -1,1 +1,0 @@
-echo // Private module queries

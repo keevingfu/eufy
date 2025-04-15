@@ -1,0 +1,63 @@
+/* Feeds模块样式 */
+.module-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.module-header {
+  margin-bottom: 20px;
+}
+
+.module-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.module-description {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.content-area {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .module-header h1 {
+    font-size: 20px;
+  }
+  
+  .module-description {
+    font-size: 14px;
+  }
+  
+  .content-area {
+    padding: 15px;
+  }
+} 

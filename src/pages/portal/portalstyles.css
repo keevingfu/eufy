@@ -1,0 +1,74 @@
+/* Portal Page Styles */
+
+.portal-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.portal-header {
+  @apply text-center mb-16;
+}
+
+.chinese-title {
+  @apply text-4xl font-bold text-pink-600 mb-2;
+}
+
+.english-subtitle {
+  @apply text-gray-600 text-lg;
+}
+
+.module-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16;
+}
+
+.module-card {
+  @apply bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition-all duration-300;
+  border: 1px solid #f0f0f0;
+}
+
+.module-card:hover {
+  @apply transform -translate-y-1;
+}
+
+.module-icon {
+  @apply text-4xl mb-4;
+}
+
+.module-title {
+  @apply text-xl font-semibold text-gray-800 mb-3;
+}
+
+.module-description {
+  @apply text-gray-600 text-sm leading-relaxed;
+}
+
+.portal-footer {
+  @apply text-center text-gray-500 text-sm;
+}
+
+.portal-nav {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.nav-item {
+  @apply flex items-center justify-center p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-lg font-medium text-gray-800 hover:text-pink-600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chinese-title {
+    @apply text-3xl;
+  }
+  
+  .english-subtitle {
+    @apply text-base;
+  }
+  
+  .module-grid {
+    @apply gap-4;
+  }
+  
+  .module-card {
+    @apply p-6;
+  }
+}
