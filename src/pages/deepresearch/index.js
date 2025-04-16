@@ -1,13 +1,17 @@
-import { createDeepModel } from './deepmodel';
-import DeepResearch from './index.js';
+import { createDeepModel } from './deepmodel.js';
+
+// Create an empty object as default export
+const DeepResearch = {
+  // You can add required properties and methods here
+};
 
 export default DeepResearch;
 
 export const researchTopics = [
-  'Gen Z shopping behaviors in US market',
-  'Disney product licensing trends 2025',
-  'Campus life essentials market analysis',
-  'Stationary market competitive analysis'
+  'Consumer Trends for Smart Home Cleaning Products in the Chinese Market',
+  'Gen Z Usage Preferences and Pain Points Analysis for Smart Home Products',
+  '2025 Smart Cleaning Appliances Market Forecast and Opportunities',
+  'Market Potential for 3D Printing Integration with Smart Home Products'
 ];
 
 
@@ -48,8 +52,7 @@ export const extractCompetitors = (researchText) => {
   }
   
   try {
-    const competitorSection = researchText.match(/竞争[^]*?(?=##|$)/i) || 
-                             researchText.match(/competitor[^]*?(?=##|$)/i);
+    const competitorSection = researchText.match(/competitor[^]*?(?=##|$)/i);
     
     if (competitorSection) {
       const companyNames = competitorSection[0].match(/[A-Z][a-zA-Z]*(?:\s+[A-Z][a-zA-Z]*)*/g);
@@ -68,20 +71,20 @@ export const extractIndustry = (query) => {
   const defaultIndustry = 'Retail Industry';
   
   try {
-    const industryMatch = query.match(/(零售|电商|服装|食品|科技|教育|医疗|金融|旅游|娱乐|游戏)(?:业|行业|市场)/);
+    const industryMatch = query.match(/(retail|e-commerce|fashion|food|technology|education|healthcare|finance|tourism|entertainment|gaming)(?:\s+industry|\s+market)?/i);
     if (industryMatch) {
       const industryMap = {
-        '零售': 'Retail',
-        '电商': 'E-commerce',
-        '服装': 'Fashion',
-        '食品': 'Food',
-        '科技': 'Technology',
-        '教育': 'Education',
-        '医疗': 'Healthcare',
-        '金融': 'Finance',
-        '旅游': 'Tourism',
-        '娱乐': 'Entertainment',
-        '游戏': 'Gaming'
+        'retail': 'Retail',
+        'e-commerce': 'E-commerce',
+        'fashion': 'Fashion',
+        'food': 'Food',
+        'technology': 'Technology',
+        'education': 'Education',
+        'healthcare': 'Healthcare',
+        'finance': 'Finance',
+        'tourism': 'Tourism',
+        'entertainment': 'Entertainment',
+        'gaming': 'Gaming'
       };
       return `${industryMap[industryMatch[1]] || industryMatch[1]} Industry`;
     }
@@ -100,32 +103,14 @@ export const extractTargetAudience = (researchText) => {
   }
   
   try {
-    const audienceSection = researchText.match(/目标[^]*?(?=##|$)/i) || 
-                           researchText.match(/消费者[^]*?(?=##|$)/i) ||
-                           researchText.match(/用户[^]*?(?=##|$)/i) ||
-                           researchText.match(/target[^]*?(?=##|$)/i) ||
+    const audienceSection = researchText.match(/target[^]*?(?=##|$)/i) ||
                            researchText.match(/consumer[^]*?(?=##|$)/i) ||
                            researchText.match(/user[^]*?(?=##|$)/i);
     
     if (audienceSection) {
-      const audienceMatch = audienceSection[0].match(/(\d+-\d+岁[^,，。]*)|([^,，。]*年轻人[^,，。]*)|([^,，。]*学生[^,，。]*)|([^,，。]*女性[^,，。]*)|([^,，。]*男性[^,，。]*)/);
+      const audienceMatch = audienceSection[0].match(/(\d+-\d+\s*years\s*old[^,]*)|([^,]*young\s*people[^,]*)|([^,]*students[^,]*)|([^,]*female[^,]*)|([^,]*male[^,]*)/i);
       if (audienceMatch) {
         const audience = audienceMatch[0].trim();
-        // Translate common Chinese audience descriptions
-        if (audience.includes('岁')) {
-          return audience.replace(/(\d+)-(\d+)岁/, 'Aged $1-$2')
-                        .replace('年轻消费者', 'young consumers')
-                        .replace('消费者', 'consumers')
-                        .replace('用户', 'users');
-        } else if (audience.includes('年轻人')) {
-          return audience.replace('年轻人', 'Young people');
-        } else if (audience.includes('学生')) {
-          return audience.replace('学生', 'Students');
-        } else if (audience.includes('女性')) {
-          return audience.replace('女性', 'Female');
-        } else if (audience.includes('男性')) {
-          return audience.replace('男性', 'Male');
-        }
         return audience;
       }
     }
@@ -140,16 +125,16 @@ export const extractProduct = (query) => {
   const defaultProduct = 'Consumer Goods';
   
   try {
-    const productMatch = query.match(/(产品|服务|商品|解决方案)/);
+    const productMatch = query.match(/(product|service|goods|solution)/i);
     if (productMatch) {
       const beforeProduct = query.substring(0, productMatch.index).trim().split(/\s+/).pop() || '';
       const afterProduct = query.substring(productMatch.index + productMatch[0].length).trim().split(/\s+/)[0] || '';
       
       const productTypeMap = {
-        '产品': 'Product',
-        '服务': 'Service',
-        '商品': 'Goods',
-        '解决方案': 'Solution'
+        'product': 'Product',
+        'service': 'Service',
+        'goods': 'Goods',
+        'solution': 'Solution'
       };
       
       const translatedType = productTypeMap[productMatch[0]] || 'Product';
@@ -192,7 +177,7 @@ export const processResearchResult = (resultText, query, thoughtChain, streamRes
     } catch (e) {
       summary = resultText;
       
-      const findingsMatch = resultText.match(/关键发现|Key Findings([\s\S]*?)(?=##|$)/i);
+      const findingsMatch = resultText.match(/Key Findings([\s\S]*?)(?=##|$)/i);
       if (findingsMatch) {
         const findingsText = findingsMatch[1];
         const findings = findingsText.split(/\n\s*[-•]\s*/).filter(f => f.trim());
@@ -202,7 +187,7 @@ export const processResearchResult = (resultText, query, thoughtChain, streamRes
         }));
       }
       
-      const sourcesMatch = resultText.match(/来源|Sources([\s\S]*?)(?=##|$)/i);
+      const sourcesMatch = resultText.match(/Sources([\s\S]*?)(?=##|$)/i);
       if (sourcesMatch) {
         const sourcesText = sourcesMatch[1];
         const sourcesList = sourcesText.split(/\n\s*[-•]\s*/).filter(s => s.trim());
@@ -214,7 +199,7 @@ export const processResearchResult = (resultText, query, thoughtChain, streamRes
         }));
       }
       
-      const opportunitiesMatch = resultText.match(/机会|Opportunities([\s\S]*?)(?=##|$)/i);
+      const opportunitiesMatch = resultText.match(/Opportunities([\s\S]*?)(?=##|$)/i);
       if (opportunitiesMatch) {
         const opportunitiesText = opportunitiesMatch[1];
         const opportunitiesList = opportunitiesText.split(/\n\s*[-•]\s*/).filter(o => o.trim());
@@ -319,13 +304,13 @@ export const handleSearch = async (
   setActiveTab,
   updateStepProgress
 ) => {
-  // 获取当前的stepProgress值
+  // Get current stepProgress value
   let stepProgress = 0;
   
-  // 创建一个包装函数，用于更新stepProgress值并调用setStepProgress
+  // Create a wrapper function to update stepProgress value and call setStepProgress
   const updateStepProgressWrapper = (progress) => {
-    stepProgress = progress; // 更新本地变量
-    setStepProgress(progress); // 更新React状态
+    stepProgress = progress; // Update local variable
+    setStepProgress(progress); // Update React state
   };
   if (!searchQuery.trim() || !deepModel) return;
   
