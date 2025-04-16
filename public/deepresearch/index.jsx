@@ -3,7 +3,7 @@ import { createDeepModel } from './deepmodel';
 import {
   updateStepProgress as updateProgress,
   handleSearch as performSearch
-} from './index.js';
+} from './index.jsx';
 import ReactMarkdown from 'react-markdown';
 import {
   Search,

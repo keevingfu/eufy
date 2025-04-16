@@ -1,5 +1,5 @@
 import { createDeepModel } from './deepmodel';
-import DeepResearch from './index.jsx';
+import DeepResearch from './index.js';
 
 export default DeepResearch;
 
