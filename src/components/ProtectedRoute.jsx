@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-// import { useAuth } from '../contexts/AuthContext';
-
+import { useAuth } from '../contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
 /**
  * 受保护路由组件
  * 已修改：移除了认证检查，允许直接访问所有路由
@@ -9,12 +9,12 @@ import { Outlet } from 'react-router-dom';
  */
 const ProtectedRoute = () => {
   // 移除认证检查，直接渲染子路由
-  // const { isAuthenticated } = useAuth();
+   const { isAuthenticated } = useAuth();
   
   // 不再检查登录状态，直接允许访问
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!isAuthenticated) {
+     return <Navigate to="/login" replace />;
+  }
   
   // 直接渲染子路由，无需认证
   return <Outlet />;
