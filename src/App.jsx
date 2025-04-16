@@ -13,9 +13,7 @@ import KocKol from './pages/KocKol';
 import Feeds from './pages/Feeds';
 import Private from './pages/Private';
 import DeepSearch from './pages/DeepSearch';
-import Research from './pages/Research';
 import NotFound from './pages/NotFound';
-
 // Protected route component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -43,7 +41,6 @@ function App() {
         <Route path="feeds" element={<Feeds />} />
         <Route path="private" element={<Private />} />
         <Route path="deepsearch" element={<DeepSearch />} />
-        <Route path="research" element={<Research />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

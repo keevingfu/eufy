@@ -148,12 +148,6 @@ const MainLayout = () => {
             >
               Deep Search
             </button>
-            <button 
-              className={`nav-item ${activeModule === 'research' ? 'active' : ''}`}
-              onClick={() => handleModuleChange('research')}
-            >
-              Research
-            </button>
           </div>
         </div>
       </nav>
