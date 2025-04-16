@@ -1,75 +1,70 @@
-# Eufy 智能决策系统
+# Getting Started with Create React App
 
-Eufy Robot Vacuum - 内容驱动的智能增长决策系统
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## 项目介绍
+## Available Scripts
 
-A comprehensive data analysis and visualization system designed for Eufy's robotic vacuum cleaner products marketing team. This system helps analyze content performance across multiple platforms, understand consumer insights, and optimize marketing strategies.
+In the project directory, you can run:
 
-## System Modules
+### `npm start`
 
-### O Module (Overview)
-Real-time data dashboard integrating all key business metrics into a unified view using HTML/CSS/JS with ECharts and D3.js visualizations.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### I Module (Insight)
-Data insight analysis system integrating search insights, VOC insights, viral video analysis, and opportunity discovery.
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### K Module (KOC & KOL)
-Content creator management and collaboration system optimizing content production process and effect tracking.
+### `npm test`
 
-### F Module (Feeds)
-Content empowerment advertisement distribution effect analysis system optimizing delivery strategy and conversion effect.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### P Module (Private)
-Private domain traffic management and precision marketing system enhancing user loyalty and long-term value.
+### `npm run build`
 
-## Technology Stack
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-- Frontend: HTML5, CSS3, JavaScript (ES6+)
-- Data Visualization: ECharts, D3.js, SVG
-- Data Source: SQLite database (eufy_social_media.db)
-- Development Tools: VSCode, Git, Chrome DevTools
-- Browser Support: Chrome, Firefox, Safari, Edge latest versions
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## 安装与使用
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### 前提条件
+### `npm run eject`
 
-- Node.js (推荐 v14.0.0 或更高版本)
-- npm (随Node.js一起安装)
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-### 安装步骤
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-1. 克隆或下载此项目到本地
-2. 在项目根目录打开终端，运行以下命令安装依赖:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-```bash
-npm install
-```
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-### 启动项目
+## Learn More
 
-开发模式启动（自动重载）:
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-```bash
-npm run dev
-```
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-生产模式启动:
+### Code Splitting
 
-```bash
-npm start
-```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-启动后，打开浏览器访问: http://localhost:4001 (或.env文件中配置的PORT)
+### Analyzing the Bundle Size
 
-## 环境变量配置
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-项目使用.env文件进行环境配置，主要包括:
+### Making a Progressive Web App
 
-- PORT: 服务器监听端口（默认为3000）
-- 其他API相关配置
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-## Usage
+### Advanced Configuration
 
-Navigate through different modules by using the sidebar navigation. Each module provides specialized tools and visualizations for different aspects of content marketing analysis.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

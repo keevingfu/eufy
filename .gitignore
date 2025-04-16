@@ -1,48 +1,65 @@
-# macOS system files
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Windows system files
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# testing
+/coverage
+/.nyc_output
+/cypress/videos
+/cypress/screenshots
 
-# Logs
-*.log
+# production
+/build
+/dist
+/.next
+/out
 
-# IDE
-.vscode/
-.idea/
+# TypeScript
+*.tsbuildinfo
+/tsconfig.tsbuildinfo
+/.tscache
+
+# IDE and editor files
+/.idea
+/.vscode
 *.swp
 *.swo
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
 
-# Node.js
-node_modules/
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
+pnpm-debug.log*
+lerna-debug.log*
 
-# Build folders
-build/
-dist/
-# Embedded repositories
-web-ui/
+# Cache directories
+.npm
+.eslintcache
+.stylelintcache
+.prettiercache
+.turbo
+.cache
+/.next/cache
+
+# Optional npm packages
+/.pnpm-store
+
+# Yarn v2
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

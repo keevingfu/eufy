@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text;
+  }
+}
+
+@layer components {
+  .nav-item {
+    @apply px-4 py-3 cursor-pointer font-medium text-center transition-all duration-300 border-b-2 border-transparent whitespace-nowrap hover:bg-hover;
+  }
+
+  .nav-item.active {
+    @apply text-primary border-b-2 border-primary bg-active;
+  }
+
+  .submenu-item {
+    @apply px-3 py-2 m-1 cursor-pointer text-sm rounded-full bg-hover transition-all duration-200 hover:bg-active;
+  }
+
+  .submenu-item.active {
+    @apply bg-primary text-white;
+  }
+
+  .card {
+    @apply bg-card rounded-lg shadow-custom p-5 mb-6;
+  }
+}
