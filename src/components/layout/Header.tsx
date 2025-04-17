@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import LogoutButton from '../shared/LogoutButton';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header: React.FC = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <header className="border-b border-border mb-5">
       <div className="max-w-7xl mx-auto px-4 py-5">
@@ -10,6 +14,8 @@ const Header: React.FC = () => {
             <img src="/eufy_logo.png" alt="Eufy Logo" className="h-10 mr-3" />
             <span>Eufy Content-Driven Growth Decision System</span>
           </Link>
+          
+          {isAuthenticated && <LogoutButton />}
         </div>
       </div>
     </header>
