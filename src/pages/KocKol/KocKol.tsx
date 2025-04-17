@@ -29,6 +29,44 @@ const KocKol: React.FC<KocKolProps> = () => {
   const [currentThinkingStep, setCurrentThinkingStep] = useState(0);
   const [showThinking, setShowThinking] = useState(false);
   const thinkingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // 添加状态来控制是否显示各平台性能内容
+  const [showYouTubePerformance, setShowYouTubePerformance] = useState(false);
+  const [showInstagramPerformance, setShowInstagramPerformance] = useState(false);
+  const [showTikTokPerformance, setShowTikTokPerformance] = useState(false);
+  
+  // 添加状态来控制性能内容的加载状态
+  const [performanceLoading, setPerformanceLoading] = useState(false);
+
+  // 重置所有性能显示状态
+  const resetPerformanceStates = () => {
+    setShowYouTubePerformance(false);
+    setShowInstagramPerformance(false);
+    setShowTikTokPerformance(false);
+  };
+  
+  // 显示性能内容的函数，带有加载动画
+  const showPerformanceWithLoading = (performanceType: 'youtube' | 'instagram' | 'tiktok') => {
+    // 先显示加载动画
+    setPerformanceLoading(true);
+    
+    // 重置所有性能显示状态
+    resetPerformanceStates();
+    
+    // 延迟1.5秒后显示性能内容
+    setTimeout(() => {
+      setPerformanceLoading(false);
+      
+      // 根据类型显示对应的性能内容
+      if (performanceType === 'youtube') {
+        setShowYouTubePerformance(true);
+      } else if (performanceType === 'instagram') {
+        setShowInstagramPerformance(true);
+      } else if (performanceType === 'tiktok') {
+        setShowTikTokPerformance(true);
+      }
+    }, 1500);
+  };
 
   // Handle search query and show thinking process
   const handleSearchWithThinking = (query: string) => {
@@ -43,8 +81,19 @@ const KocKol: React.FC<KocKolProps> = () => {
       thinkingIntervalRef.current = null;
     }
     
-    // 直接调用搜索函数，跳过分析过程
-    handleSearch(query);
+    // 根据查询内容显示对应的性能内容
+    if (query === "What is the performance of our self-operated YouTube channel?") {
+      showPerformanceWithLoading('youtube');
+    } else if (query === "How is our Instagram social media performance trending?") {
+      showPerformanceWithLoading('instagram');
+    } else if (query === "Analyze our TikTok social performance metrics over time") {
+      showPerformanceWithLoading('tiktok');
+    } else {
+      // 重置所有性能显示状态
+      resetPerformanceStates();
+      // 直接调用搜索函数，跳过分析过程
+      handleSearch(query);
+    }
   };
 
   // Clear timer when component unmounts
@@ -66,79 +115,30 @@ const KocKol: React.FC<KocKolProps> = () => {
     }
   }, [searchResults, showResults, renderChart]);
 
+  // 当切换子模块时，重置状态
+  const handleSubModuleChange = (subModuleId: string) => {
+    setActiveSubModule(subModuleId);
+    resetPerformanceStates();
+  };
+
   const subModules = [
-    { id: 'koc-trends', label: 'Content Trends' },
-    { id: 'koc-youtube', label: 'YouTube Trends' },
-    { id: 'koc-instagram', label: 'Instagram Trends' },
-    { id: 'koc-tiktok', label: 'TikTok Trends' },
-    { id: 'koc-paid', label: 'Paid KOL' },
     { id: 'koc-self', label: 'Self-Operated KOC' },
-    { id: 'koc-user', label: 'User Journey' },
-    { id: 'koc-search', label: 'Search Performance' }
   ];
 
   // Get recommended questions based on current submodule
   const getRecommendedQuestions = () => {
     switch (activeSubModule) {
-      case 'koc-youtube':
-        return [
-          "Show me content trends on YouTube for robot vacuums",
-          "Which YouTube channels have the highest engagement for robot vacuum content?",
-          "What is the average view count for our YouTube videos?",
-          "How do our YouTube videos compare to competitors?"
-        ];
-      case 'koc-instagram':
-        return [
-          "Which Instagram influencers have the highest engagement rate?",
-          "What type of Instagram content performs best for robot vacuums?",
-          "How has our Instagram engagement changed over time?",
-          "Which hashtags drive the most engagement on Instagram?"
-        ];
-      case 'koc-tiktok':
-        return [
-          "Which content formats drive the most engagement on TikTok?",
-          "Who are the top TikTok creators in the robot vacuum space?",
-          "What TikTok trends should we leverage for our products?",
-          "How does our TikTok performance compare to competitors?"
-        ];
-      case 'koc-paid':
-        return [
-          "What is the ROI comparison between micro and macro influencers?",
-          "Which paid KOL campaigns had the highest conversion rate?",
-          "How does paid KOL content performance vary by platform?",
-          "What is the optimal budget allocation for KOL marketing?"
-        ];
       case 'koc-self':
         return [
-          "How is our self-operated KOC content performing?",
-          "Which content themes perform best on our own channels?",
-          "What is the engagement rate trend for our self-operated accounts?",
-          "How can we improve our self-operated KOC strategy?"
+          "What is the performance of our self-operated YouTube channel?",
+          "How is our Instagram social media performance trending?",
+          "Analyze our TikTok social performance metrics over time",
         ];
-      case 'koc-user':
+      default:
         return [
-          "What is the typical user journey for our products?",
-          "At which touchpoints do users engage most with our content?",
-          "How does content consumption correlate with purchase intent?",
-          "What content types drive the highest conversion rates?"
-        ];
-      case 'koc-search':
-        return [
-          "How do our products rank in search results compared to competitors?",
-          "Which keywords drive the most traffic to our content?",
-          "How has our search visibility changed over time?",
-          "What content optimizations would improve our search performance?"
-        ];
-      default: // koc-trends
-        return [
-          "Show me content trends on YouTube for robot vacuums",
-          "Which Instagram influencers have the highest engagement rate?",
-          "How is our self-operated KOC content performing?",
-          "What is the typical user journey for our products?",
-          "How do our products rank in search results compared to competitors?",
-          "Which content formats drive the most engagement on TikTok?",
-          "What is the ROI comparison between micro and macro influencers?",
-          "How has the content landscape evolved over the past year?"
+          "What is the performance of our self-operated YouTube channel?",
+          "How is our Instagram social media performance trending?",
+          "Analyze our TikTok social performance metrics over time",
         ];
     }
   };
@@ -150,7 +150,7 @@ const KocKol: React.FC<KocKolProps> = () => {
           <div
             key={module.id}
             className={`submenu-item ${activeSubModule === module.id ? 'active' : ''}`}
-            onClick={() => setActiveSubModule(module.id)}
+            onClick={() => handleSubModuleChange(module.id)}
           >
             {module.label}
           </div>
@@ -189,7 +189,18 @@ const KocKol: React.FC<KocKolProps> = () => {
               className="question-card"
               onClick={() => {
                 setSearchInput(question);
-                handleSearch(question);
+                // 根据问题显示对应的性能内容
+                if (question === "What is the performance of our self-operated YouTube channel?") {
+                  showPerformanceWithLoading('youtube');
+                } else if (question === "How is our Instagram social media performance trending?") {
+                  showPerformanceWithLoading('instagram');
+                } else if (question === "Analyze our TikTok social performance metrics over time") {
+                  showPerformanceWithLoading('tiktok');
+                } else {
+                  // 重置所有性能显示状态
+                  resetPerformanceStates();
+                  handleSearch(question);
+                }
               }}
             >
               <div className="question-text">{question}</div>
@@ -221,11 +232,12 @@ const KocKol: React.FC<KocKolProps> = () => {
       )}
       */}
 
-      <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
+      <div className="loading" style={{ display: (loading || performanceLoading) ? 'block' : 'none' }}>
         <div className="spinner"></div>
         <p>Analyzing data, please wait...</p>
       </div>
 
+      {/* 普通搜索结果 */}
       <div className="results-container" style={{ display: showResults ? 'block' : 'none' }}>
         <div className="results-header">
           <div className="results-title" id="results-title">
@@ -262,6 +274,33 @@ const KocKol: React.FC<KocKolProps> = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* YouTube性能内容 */}
+      <div className="youtube-performance-container" style={{ display: showYouTubePerformance ? 'block' : 'none' }}>
+        <iframe 
+          src={`${process.env.PUBLIC_URL}/pages/add/selfkoc_youtube_social_performance.html`}
+          style={{ width: '100%', height: '800px', border: 'none', borderRadius: '10px' }}
+          title="YouTube Performance Dashboard"
+        />
+      </div>
+
+      {/* Instagram性能内容 */}
+      <div className="instagram-performance-container" style={{ display: showInstagramPerformance ? 'block' : 'none' }}>
+        <iframe 
+          src={`${process.env.PUBLIC_URL}/pages/add/selfkoc_instagram_social_performance.html`}
+          style={{ width: '100%', height: '800px', border: 'none', borderRadius: '10px' }}
+          title="Instagram Performance Dashboard"
+        />
+      </div>
+
+      {/* TikTok性能内容 */}
+      <div className="tiktok-performance-container" style={{ display: showTikTokPerformance ? 'block' : 'none' }}>
+        <iframe 
+          src={`${process.env.PUBLIC_URL}/pages/add/selfkoc_tiktok_social_performance.html`}
+          style={{ width: '100%', height: '800px', border: 'none', borderRadius: '10px' }}
+          title="TikTok Performance Dashboard"
+        />
       </div>
     </div>
   );

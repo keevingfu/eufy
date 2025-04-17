@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-  ]
+, "public/pages/add/dashboard_charts.js", "public/pages/add/dashboard.js", "public/pages/add/mock_data.js", "public/pages/add/tiktok_dashboard_charts.js", "public/pages/add/tiktok_dashboard_data.js", "public/pages/add/tiktok_dashboard.js", "public/pages/add/youtube_dashboard_charts.js", "public/pages/add/youtube_dashboard_data.js", "public/pages/add/youtube_dashboard.js"  ]
 }
