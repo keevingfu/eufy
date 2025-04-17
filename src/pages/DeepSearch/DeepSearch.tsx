@@ -508,9 +508,9 @@ const DeepSearch = () => {
                   <h4>Analysis Complete</h4>
                 </div>
                 <div className="history-item-content">
-                  <div className="result-summary">
-                    <p>{selectedResearch.title}</p>
-                  </div>
+                    <div className="streaming-result-content">
+                      {streamingResult}
+                    </div>
                 </div>
               </div>
             </div>
