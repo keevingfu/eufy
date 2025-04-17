@@ -24,10 +24,58 @@ import {
 } from 'lucide-react';
 import './styles/deepresearchstyles.css';
 
+// 为ResearchResult类型添加internalData字段
+interface ModelData {
+  name: string;
+  performance: number;
+}
+
+interface ChannelData {
+  channel: string;
+  engagement: number;
+  conversion: number;
+}
+
+interface StrategyData {
+  strategy: string;
+  effectiveness: number;
+  implementation: number;
+}
+
+interface CrossModuleInsights {
+  insightKoc?: string;
+  contentPrivate?: string;
+  kocContent?: string;
+}
+
+interface InternalData {
+  topPerformingModels?: ModelData[];
+  channelPerformance?: ChannelData[];
+  marketingStrategy?: StrategyData[];
+  crossModuleInsights?: CrossModuleInsights;
+}
+
+// 添加Recommendation相关的接口
+interface RecommendationItem {
+  text?: string;
+  title?: string;
+  priority: string;
+  impact?: string;
+  effort?: string;
+  description?: string;
+  actions?: string[];
+}
+
+// 扩展ResearchResult接口
+interface EnhancedResearchResult extends Omit<ResearchResult, 'recommendations'> {
+  internalData?: InternalData;
+  recommendations?: RecommendationItem[];
+}
+
 const DeepSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [selectedResearch, setSelectedResearch] = useState<ResearchResult | null>(null);
+  const [selectedResearch, setSelectedResearch] = useState<EnhancedResearchResult | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'internal' | 'recommendations'>('overview');
   const [analysisInProgress, setAnalysisInProgress] = useState(false);
   const [deepModel, setDeepModel] = useState<any>(null);
@@ -190,14 +238,14 @@ const DeepSearch = () => {
           
           <div className="suggested-topics">
             <div className="topic-label">Suggested topics:</div>
-            <button className="topic-tag" onClick={() => setSearchQuery('Consumer trends in eco-friendly stationery')}>
-              Consumer trends in eco-friendly stationery
+            <button className="topic-tag" onClick={() => setSearchQuery('Robot vacuum user behavior trends')}>
+              Robot vacuum user behavior trends
             </button>
-            <button className="topic-tag" onClick={() => setSearchQuery('Gen Z campus life product preferences')}>
-              Gen Z campus life product preferences
+            <button className="topic-tag" onClick={() => setSearchQuery('2025 market growth forecast')}>
+              2025 market growth forecast
             </button>
-            <button className="topic-tag" onClick={() => setSearchQuery('Holiday gift market forecast 2025')}>
-              Holiday gift market forecast 2025
+            <button className="topic-tag" onClick={() => setSearchQuery('Premium vs budget vacuum preferences')}>
+              Premium vs budget vacuum preferences
             </button>
           </div>
         </div>
@@ -320,7 +368,7 @@ const DeepSearch = () => {
                   className={`tab ${activeTab === 'internal' ? 'active' : ''}`}
                   onClick={() => setActiveTab('internal')}
                 >
-                  MINISO Data Integration
+                  Eufy Data Integration
                 </button>
                 <button
                   className={`tab ${activeTab === 'recommendations' ? 'active' : ''}`}
@@ -497,7 +545,7 @@ const DeepSearch = () => {
                 className={`tab ${activeTab === 'internal' ? 'active' : ''}`}
                 onClick={() => setActiveTab('internal')}
               >
-                MINISO Data Integration
+                Eufy Data Integration
               </button>
               <button
                 className={`tab ${activeTab === 'recommendations' ? 'active' : ''}`}
@@ -623,10 +671,143 @@ const DeepSearch = () => {
             
             {activeTab === 'internal' && (
               <div className="tab-content">
-                <div className="internal-data-section">
-                  <h3>MINISO Data Integration</h3>
-                  <div className="internal-content">
-                    <ReactMarkdown>{selectedResearch?.internalDataIntegration || ''}</ReactMarkdown>
+                <div className="integration-notice">
+                  <Zap size={20} className="notice-icon" />
+                  <div>
+                    <h3>Integrated Analysis</h3>
+                    <p>This analysis combines external research with internal Eufy data from Insight, KOC&KOL, Content Distribution, and Private Domain modules to provide comprehensive strategic recommendations.</p>
+                  </div>
+                </div>
+                
+                <div className="data-insights-grid">
+                  <div className="data-card">
+                    <h3>Top Performing Robot Vacuum Models</h3>
+                    <div className="performance-chart">
+                      {selectedResearch?.internalData?.topPerformingModels?.map((model: ModelData, index: number) => (
+                        <div key={index} className="performance-item">
+                          <div className="performance-header">
+                            <span>{model.name}</span>
+                            <span>{model.performance}%</span>
+                          </div>
+                          <div className="performance-bar-bg">
+                            <div className="performance-bar" style={{ width: `${model.performance}%` }}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="data-card">
+                    <h3>Channel Performance</h3>
+                    <div className="channel-list">
+                      {selectedResearch?.internalData?.channelPerformance?.map((channel: ChannelData, index: number) => (
+                        <div key={index} className="channel-item">
+                          <div className="channel-header">
+                            <span>{channel.channel}</span>
+                          </div>
+                          <div className="channel-metrics">
+                            <div className="metric">
+                              <div className="metric-header">
+                                <span>Engagement Rate</span>
+                                <span>{channel.engagement}%</span>
+                              </div>
+                              <div className="metric-bar-bg">
+                                <div className="engagement-bar" style={{ width: `${channel.engagement}%` }}></div>
+                              </div>
+                            </div>
+                            <div className="metric">
+                              <div className="metric-header">
+                                <span>Conversion Rate</span>
+                                <span>{channel.conversion}%</span>
+                              </div>
+                              <div className="metric-bar-bg">
+                                <div className="conversion-bar" style={{ width: `${channel.conversion * 10}%` }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="strategy-section">
+                  <h3>Product Marketing Strategy Effectiveness</h3>
+                  <div className="strategy-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Strategy</th>
+                          <th>Effectiveness</th>
+                          <th>Implementation Level</th>
+                          <th>Gap</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedResearch?.internalData?.marketingStrategy?.map((strategy: StrategyData, index: number) => {
+                          const gap = strategy.effectiveness - strategy.implementation;
+                          return (
+                            <tr key={index}>
+                              <td>
+                                <div className="strategy-name">{strategy.strategy}</div>
+                              </td>
+                              <td>
+                                <div className="metric-display">
+                                  <div className="metric-bar-bg small">
+                                    <div className="effectiveness-bar" style={{ width: `${strategy.effectiveness}%` }}></div>
+                                  </div>
+                                  <span>{strategy.effectiveness}%</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="metric-display">
+                                  <div className="metric-bar-bg small">
+                                    <div className="implementation-bar" style={{ width: `${strategy.implementation}%` }}></div>
+                                  </div>
+                                  <span>{strategy.implementation}%</span>
+                                </div>
+                              </td>
+                              <td>
+                                <span className={`gap-badge ${
+                                  gap > 20 ? 'high' :
+                                  gap > 10 ? 'medium' :
+                                  'low'
+                                }`}>
+                                  {gap}%
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div className="cross-module-insights">
+                  <h4>
+                    <Clipboard size={18} className="insights-icon" /> 
+                    Cross-Module Insights
+                  </h4>
+                  <div className="insights-list">
+                    <div className="insight-item">
+                      <Tag size={14} className="tag-icon" />
+                      <p>
+                        <span className="module-name">Insight + KOC&KOL:</span> {selectedResearch?.internalData?.crossModuleInsights?.insightKoc || 'Feature preferences from VOC analysis align with KOC content performance, suggesting natural synergy.'}
+                      </p>
+                    </div>
+                    <div className="insight-item">
+                      <Tag size={14} className="tag-icon" />
+                      <p>
+                        <span className="module-name">Content Distribution + Private Domain:</span> {selectedResearch?.internalData?.crossModuleInsights?.contentPrivate || 'Robot vacuum ads show higher conversion rates in markets where landing pages have been optimized with specific feature content.'}
+                      </p>
+                    </div>
+                    <div className="insight-item">
+                      <Tag size={14} className="tag-icon" />
+                      <p>
+                        <span className="module-name">KOC&KOL + Content Distribution:</span> {selectedResearch?.internalData?.crossModuleInsights?.kocContent || 'Product comparison videos on TikTok generated 42% higher ad recall than standard product showcases.'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -637,32 +818,84 @@ const DeepSearch = () => {
                 <div className="recommendations-section">
                   <h3>Strategic Recommendations</h3>
                   <div className="recommendations-list">
-                    {selectedResearch?.recommendations?.map((rec: {
-                      title: string;
-                      priority: string;
-                      description: string;
-                      actions?: string[];
-                    }, index: number) => (
-                      <div key={index} className="recommendation-item">
-                        <div className="recommendation-header">
-                          <h4>{rec.title}</h4>
-                          <span className={`priority-badge ${rec.priority.toLowerCase()}`}>
-                            {rec.priority} Priority
-                          </span>
+                    {selectedResearch?.recommendations?.map((recommendation, index) => (
+                      <div key={index} className="recommendation-card">
+                        <div className="recommendation-icon">
+                          <TrendingUp size={16} className={`icon-${recommendation.priority?.toLowerCase()}`} />
                         </div>
-                        <p>{rec.description}</p>
-                        {rec.actions && (
-                          <div className="action-steps">
-                            <h5>Action Steps</h5>
-                            <ul>
-                              {rec.actions.map((action: string, i: number) => (
-                                <li key={i}>{action}</li>
-                              ))}
-                            </ul>
+                        <div className="recommendation-content">
+                          <p className="recommendation-text">{recommendation.text || recommendation.title || recommendation.description}</p>
+                          <div className="recommendation-tags">
+                            <span className={`tag priority-${recommendation.priority?.toLowerCase()}`}>
+                              Priority: {recommendation.priority}
+                            </span>
+                            {recommendation.impact && (
+                              <span className={`tag impact-${recommendation.impact?.toLowerCase()}`}>
+                                Impact: {recommendation.impact}
+                              </span>
+                            )}
+                            {recommendation.effort && (
+                              <span className={`tag effort-${recommendation.effort?.toLowerCase()}`}>
+                                Effort: {recommendation.effort}
+                              </span>
+                            )}
                           </div>
-                        )}
+                        </div>
+                        <div className="recommendation-actions">
+                          <button className="action-icon comment">
+                            <MessageCircle size={16} />
+                          </button>
+                          <button className="action-icon approve">
+                            <Check size={16} />
+                          </button>
+                          <button className="action-icon reject">
+                            <X size={16} />
+                          </button>
+                        </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+                
+                <div className="roadmap-section">
+                  <h3>Implementation Roadmap</h3>
+                  <div className="roadmap-timeline">
+                    <div className="timeline-item current">
+                      <div className="timeline-marker"></div>
+                      <div className="timeline-content">
+                        <h4>Q2 2025: Initial Implementation</h4>
+                        <p>
+                          Launch TikTok campaign for robot vacuum product line and optimize landing pages for feature-specific content.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="timeline-item">
+                      <div className="timeline-marker"></div>
+                      <div className="timeline-content">
+                        <h4>Q3 2025: Expansion</h4>
+                        <p>
+                          Develop eco-friendly robot vacuum product line and begin development of smart home integration experiences.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="timeline-item">
+                      <div className="timeline-marker"></div>
+                      <div className="timeline-content">
+                        <h4>Q4 2025: Regional Customization</h4>
+                        <p>
+                          Launch regional robot vacuum models based on local preferences identified through KOC feedback.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="timeline-item">
+                      <div className="timeline-marker"></div>
+                      <div className="timeline-content">
+                        <h4>Q1 2026: Innovation Phase</h4>
+                        <p>
+                          Test subscription-based models for premium robot vacuum features and evaluate performance-based service models.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

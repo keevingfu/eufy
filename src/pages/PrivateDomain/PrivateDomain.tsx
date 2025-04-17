@@ -154,6 +154,19 @@ const PrivateDomain: React.FC<PrivateDomainProps> = () => {
             <i className="fas fa-search"></i> Search
           </button>
         </div>
+        
+        <div className="suggested-topics">
+          <div className="topic-label">Suggested topics:</div>
+          <button className="topic-tag" onClick={() => setSearchInput('Robot vacuum user behavior trends')}>
+            Robot vacuum user behavior trends
+          </button>
+          <button className="topic-tag" onClick={() => setSearchInput('2025 market growth forecast')}>
+            2025 market growth forecast
+          </button>
+          <button className="topic-tag" onClick={() => setSearchInput('Premium vs budget vacuum preferences')}>
+            Premium vs budget vacuum preferences
+          </button>
+        </div>
       </div>
 
       <div className="suggested-questions">
