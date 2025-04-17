@@ -43,43 +43,8 @@ const Insight: React.FC<InsightProps> = () => {
       thinkingIntervalRef.current = null;
     }
     
-    // Mock thinking steps - in actual application, these could come from API
-    const mockThinkingSteps: ThinkingStep[] = [
-      { step: 1, thought: "Analyzing query content, determining relevant insight categories" },
-      { step: 2, thought: "Retrieving search trend data and customer feedback" },
-      { step: 3, thought: "Processing sentiment analysis and identifying key patterns" },
-      { step: 4, thought: "Generating visualization charts and extracting key insights" },
-      { step: 5, thought: "Formulating action recommendations based on insight analysis" }
-    ];
-    
-    setThinkingSteps(mockThinkingSteps);
-    setCurrentThinkingStep(0);
-    setShowThinking(true);
-    
-    // Animate thinking steps display
-    thinkingIntervalRef.current = setInterval(() => {
-      setCurrentThinkingStep(prev => {
-        if (prev < mockThinkingSteps.length - 1) {
-          return prev + 1;
-        } else {
-          // After thinking process is complete, clear the timer and show results
-          if (thinkingIntervalRef.current) {
-            clearInterval(thinkingIntervalRef.current);
-            thinkingIntervalRef.current = null;
-          }
-          
-          // Call the actual search function to get results
-          handleSearch(query);
-          
-          // Hide thinking component in the next render cycle after thinking is complete
-          setTimeout(() => {
-            setShowThinking(false);
-          }, 1000);
-          
-          return prev;
-        }
-      });
-    }, 1500);
+    // 直接调用搜索函数，跳过分析过程
+    handleSearch(query);
   };
 
   // Clear timer when component unmounts
@@ -192,7 +157,7 @@ const Insight: React.FC<InsightProps> = () => {
               className="question-card"
               onClick={() => {
                 setSearchInput(question);
-                handleSearchWithThinking(question);
+                handleSearch(question);
               }}
             >
               <div className="question-text">{question}</div>
@@ -202,6 +167,7 @@ const Insight: React.FC<InsightProps> = () => {
       </div>
 
       {/* Thinking process visualization - only shown during thinking, hidden when results appear */}
+      {/* 注释掉这部分，让Analysis Process永远不会显示 
       {showThinking && !showResults && (
         <div className="thinking-container">
           <div className="thinking-title">Analysis Process</div>
@@ -221,6 +187,7 @@ const Insight: React.FC<InsightProps> = () => {
           </div>
         </div>
       )}
+      */}
 
       <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
         <div className="spinner"></div>
