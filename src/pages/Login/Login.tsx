@@ -15,13 +15,16 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
+    login();
+    navigate('/');
+
     // 简单验证 - 实际项目中应该使用更复杂的验证逻辑
-    if (username === 'admin' && password === 'eufypwd111') {
-      login();
-      navigate('/');
-    } else {
-      setError('Invalid username or password');
-    }
+    // if (username === 'admin' && password === 'eufypwd111') {
+    //   login();
+    //   navigate('/');
+    // } else {
+    //   setError('Invalid username or password');
+    // }
   };
 
   return (
